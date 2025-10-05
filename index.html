@@ -16,6 +16,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
+            overflow-x: hidden;
         }
 
         header {
@@ -27,6 +28,11 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: padding 0.3s;
+        }
+
+        header.scrolled {
+            padding: 0.5rem 0;
         }
 
         nav {
@@ -39,35 +45,83 @@
         }
 
         .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-        .logo img {
-    height: 40px;
-    width: 40px;
-    object-fit: cover;
-    border-radius: 8px;
-}
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
 
-        nav ul {
+        .logo img {
+            height: 40px;
+            width: 40px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover img {
+            transform: scale(1.1);
+        }
+
+        .nav-links {
             list-style: none;
             display: flex;
             gap: 2rem;
         }
 
-        nav a {
+        .nav-links a {
             color: white;
             text-decoration: none;
             transition: opacity 0.3s;
             font-weight: 500;
+            position: relative;
         }
 
-        nav a:hover {
-            opacity: 0.8;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            transition: all 0.3s;
+            border-radius: 3px;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
         }
 
         .content {
@@ -80,11 +134,11 @@
             padding: 4rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
+            animation: fadeIn 0.5s;
         }
 
         section.active {
             display: block;
-            animation: fadeIn 0.5s;
         }
 
         @keyframes fadeIn {
@@ -117,80 +171,332 @@
             line-height: 1.8;
         }
 
+        /* Hero Section */
         .hero {
             text-align: center;
-            padding: 3rem 0;
+            padding: 4rem 0;
+            position: relative;
         }
 
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        /* Projects Grid */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
         .project-card {
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1.5rem;
             transition: transform 0.3s, box-shadow 0.3s;
+            background: white;
+            overflow: hidden;
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         .project-image {
             width: 100%;
             height: 200px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 4px;
+            border-radius: 8px;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 3rem;
+            transition: transform 0.3s;
         }
 
-        .contact-info {
+        .project-card:hover .project-image {
+            transform: scale(1.05);
+        }
+
+        .project-tags {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: #667eea20;
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Mission Box */
+        .mission-box {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+            border-left: 2px solid #667eea;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+        }
+
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .skill-card {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .skill-card:hover {
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            transform: translateX(5px);
+        }
+
+        .skill-card strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .contact-item {
-            padding: 1rem;
+            padding: 1.5rem;
             background: #f5f5f5;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1.1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: white;
         }
 
         .contact-item strong {
             color: #667eea;
+            display: block;
         }
 
+        .contact-item a {
+            color: #764ba2;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: #667eea;
+        }
+
+        /* Footer */
         footer {
             background: #333;
             color: white;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
             margin-top: 4rem;
         }
 
-        .mission-box {
-            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 2rem 0;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+        }
+
+        .scroll-top.visible {
+            display: flex;
+        }
+
+        /* Loading Animation */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            nav ul {
-                gap: 1rem;
-                font-size: 0.9rem;
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                width: 100%;
+                text-align: center;
+                transition: left 0.3s;
+                box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+                padding: 2rem 0;
+                gap: 1.5rem;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                padding: 0.5rem 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
             }
 
             h1 {
@@ -204,22 +510,62 @@
             .projects-grid {
                 grid-template-columns: 1fr;
             }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            nav {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo img {
+                height: 35px;
+                width: 35px;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
+    <header id="header">
         <nav>
-            <div class="logo">
-    <img src="Assets/1759634940331.jpg" alt="KenkoLabs Logo">
-    <span>KenkoLabs</span>
-</div>
-            <ul>
-                <li><a href="#home" onclick="showSection('home')">Home</a></li>
-                <li><a href="#projects" onclick="showSection('projects')">Projects</a></li>
-                <li><a href="#about" onclick="showSection('about')">About Me</a></li>
-                <li><a href="#contact" onclick="showSection('contact')">Contact</a></li>
+            <div class="logo" onclick="showSection('home')">
+                <img src="Assets/1759634940331.jpg" alt="KenkoLabs Logo">
+                <span>KenkoLabs</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="nav-link active" onclick="showSection('home')">Home</a></li>
+                <li><a href="#projects" class="nav-link" onclick="showSection('projects')">Projects</a></li>
+                <li><a href="#about" class="nav-link" onclick="showSection('about')">About Me</a></li>
+                <li><a href="#contact" class="nav-link" onclick="showSection('contact')">Contact</a></li>
             </ul>
+            <div class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </nav>
     </header>
 
@@ -227,7 +573,22 @@
         <section id="home" class="active">
             <div class="hero">
                 <h1>Welcome to KenkoLabs</h1>
-                <p style="font-size: 1.3rem; color: #666;">Innovation Through Purpose</p>
+                <p>Innovation Through Purpose</p>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">4+</div>
+                    <div class="stat-label">Active Projects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">AI/ML</div>
+                    <div class="stat-label">Focus Area</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Innovation</div>
+                </div>
             </div>
             
             <h2>What is KenkoLabs?</h2>
@@ -239,10 +600,24 @@
             </div>
 
             <h3>Our Goals</h3>
-            <p>📌 Build impactful projects that serve real needs</p>
-            <p>💡 Explore cutting-edge technologies and methodologies</p>
-            <p>🌱 Share knowledge and inspire the next generation of creators</p>
-            <p>🚀 Push boundaries and embrace continuous learning</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>📌 Impact</h4>
+                    <p>Build impactful projects that serve real needs and make a difference in people's lives.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>💡 Innovation</h4>
+                    <p>Explore cutting-edge technologies and methodologies to stay at the forefront of AI development.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>🌱 Knowledge Sharing</h4>
+                    <p>Share knowledge and inspire the next generation of creators and developers.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>🚀 Continuous Growth</h4>
+                    <p>Push boundaries and embrace continuous learning to evolve with technology.</p>
+                </div>
+            </div>
         </section>
 
         <section id="projects">
@@ -253,27 +628,45 @@
                 <div class="project-card">
                     <div class="project-image">🤍</div>
                     <h3>The Heart Of Kenko</h3>
-                    <p>This is where it all started. I fine-tuned LLaMA 3 to give Kenkō its core intelligence. It’s the engine that understands, reasons, and generates responses—the heart of everything.</p>
+                    <p>This is where it all started. I fine-tuned LLaMA 3 to give Kenkō its core intelligence. It's the engine that understands, reasons, and generates responses—the heart of everything.</p>
+                    <div class="project-tags">
+                        <span class="tag">LLaMA 3</span>
+                        <span class="tag">Fine-tuning</span>
+                        <span class="tag">NLP</span>
+                    </div>
                 </div>
                 
                 <div class="project-card">
                     <div class="project-image">🧪</div>
                     <h3>Experimental 20M Model</h3>
                     <p>A small model, 20 million parameters, built to explore new ideas like Mixture-of-Experts (MoE). This was my playground for testing architectures and pushing boundaries before scaling up.</p>
+                    <div class="project-tags">
+                        <span class="tag">MoE</span>
+                        <span class="tag">Research</span>
+                        <span class="tag">Architecture</span>
+                    </div>
                 </div>
                 
                 <div class="project-card">
                     <div class="project-image">🤖</div>
                     <h3>The Birth Of Kenko</h3>
-                    <p>Here, theory became practice. I built the inference and testing pipelines that let Kenkō actually function. This project turned concepts into a real, working AI system.
-</p>
+                    <p>Here, theory became practice. I built the inference and testing pipelines that let Kenkō actually function. This project turned concepts into a real, working AI system.</p>
+                    <div class="project-tags">
+                        <span class="tag">Pipeline</span>
+                        <span class="tag">Inference</span>
+                        <span class="tag">Testing</span>
+                    </div>
                 </div>
                 
                 <div class="project-card">
                     <div class="project-image">🧠</div>
-                    <h3>Project Four</h3>
-                    <p>Kenko isn’t just text anymore. I’m expanding it to handle TTS now, and soon STT and NER. The goal is a truly versatile AI assistant that grows over time.
-</p>
+                    <h3>Multimodal Expansion</h3>
+                    <p>Kenko isn't just text anymore. I'm expanding it to handle TTS now, and soon STT and NER. The goal is a truly versatile AI assistant that grows over time.</p>
+                    <div class="project-tags">
+                        <span class="tag">TTS</span>
+                        <span class="tag">STT</span>
+                        <span class="tag">Multimodal</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -281,33 +674,49 @@
         <section id="about">
             <h1>About Me</h1>
             <h2>My Story</h2>
-            <p>My journey began with curiosity and a desire to understand the world through technology. Early in my university years, I faced uncertainty about my path, exploring different areas of Computer Science without a clear focus. That changed when I discovered Artificial Intelligence, which became the driving force behind my projects and ambitions.
-
-Through experimentation and learning, I combined NLP, Computer Vision, and speech technologies into Kenkō, a system designed to bridge these domains. Kenkō represents my dedication to innovation, disciplined growth, and building meaningful tools that reflect both my vision and the possibilities of AI.
-</p>
+            <p>My journey began with curiosity and a desire to understand the world through technology. Early in my university years, I faced uncertainty about my path, exploring different areas of Computer Science without a clear focus. That changed when I discovered Artificial Intelligence, which became the driving force behind my projects and ambitions.</p>
+            
+            <p>Through experimentation and learning, I combined NLP, Computer Vision, and speech technologies into Kenkō, a system designed to bridge these domains. Kenkō represents my dedication to innovation, disciplined growth, and building meaningful tools that reflect both my vision and the possibilities of AI.</p>
             
             <h3>Background</h3>
-            <p>My early years in university were a mix of exploration and uncertainty. While I was determined to succeed, I often felt unsure of what direction to take or which area of Computer Science would become my true passion. This period taught me resilience and the value of disciplined learning, even when the path wasn’t clear.
+            <p>My early years in university were a mix of exploration and uncertainty. While I was determined to succeed, I often felt unsure of what direction to take or which area of Computer Science would become my true passion. This period taught me resilience and the value of disciplined learning, even when the path wasn't clear.</p>
 
-The turning point came when I discovered Artificial Intelligence. I became captivated by its potential to solve complex problems, understand human behavior, and create systems that interact intelligently with the world. I began experimenting with projects in NLP and Computer Vision, gradually integrating them into a single multimodal system. These experiences shaped my technical expertise and clarified my long-term vision.
+            <p>The turning point came when I discovered Artificial Intelligence. I became captivated by its potential to solve complex problems, understand human behavior, and create systems that interact intelligently with the world. I began experimenting with projects in NLP and Computer Vision, gradually integrating them into a single multimodal system. These experiences shaped my technical expertise and clarified my long-term vision.</p>
 
-Inspired by the possibilities of AI, I created Kenkō, a project designed to combine NLP, CV, and speech technologies into a cohesive system. Kenkō is more than just a tool—it is the culmination of my passion for innovation, my drive to learn, and my commitment to building systems that are both practical and meaningful.</p>
+            <p>Inspired by the possibilities of AI, I created Kenkō, a project designed to combine NLP, CV, and speech technologies into a cohesive system. Kenkō is more than just a tool—it is the culmination of my passion for innovation, my drive to learn, and my commitment to building systems that are both practical and meaningful.</p>
             
             <h3>What Drives Me</h3>
-            <p>I am motivated by challenges and the complexity of building something meaningful. Each project pushes me to learn, adapt, and grow. My goal isn’t just to create technology—it’s to make a difference, leave a mark, and be remembered for building tools that matter.
+            <p>I am motivated by challenges and the complexity of building something meaningful. Each project pushes me to learn, adapt, and grow. My goal isn't just to create technology—it's to make a difference, leave a mark, and be remembered for building tools that matter.</p>
 
-I thrive on solving problems that test my limits, and I am driven by the idea of turning ambitious visions into reality. Every line of code, every experiment, and every breakthrough brings me closer to shaping something lasting, impactful, and innovative.</p>
+            <p>I thrive on solving problems that test my limits, and I am driven by the idea of turning ambitious visions into reality. Every line of code, every experiment, and every breakthrough brings me closer to shaping something lasting, impactful, and innovative.</p>
             
             <h3>Skills & Expertise</h3>
-            <ul>
-  <li><strong>Artificial Intelligence & Machine Learning:</strong> Fine-tuning LLMs, testing architectures, multimodal systems.</li>
-  <li><strong>Natural Language Processing (NLP):</strong> Text understanding, generation, contextual responses.</li>
-  <li><strong>Computer Vision (CV):</strong> Image processing, facial emotion recognition.</li>
-  <li><strong>Text-to-Speech & Speech-to-Text (TTS/STT):</strong> Audio interfaces for AI interaction and accessibility.</li>
-  <li><strong>Programming & Software Development:</strong> Python, PyTorch, Hugging Face, full-stack deployment.</li>
-  <li><strong>Project Management & Research:</strong> Experiment design, tracking results, iterative improvement.</li>
-  <li><strong>Data Engineering & Model Optimization:</strong> Large datasets, efficiency improvements, real-time inference.</li>
-</ul>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <strong>Artificial Intelligence & Machine Learning</strong>
+                    Fine-tuning LLMs, testing architectures, multimodal systems
+                </div>
+                <div class="skill-card">
+                    <strong>Natural Language Processing (NLP)</strong>
+                    Text understanding, generation, contextual responses
+                </div>
+                <div class="skill-card">
+                    <strong>Computer Vision (CV)</strong>
+                    Image processing, facial emotion recognition
+                </div>
+                <div class="skill-card">
+                    <strong>Text-to-Speech & Speech-to-Text</strong>
+                    Audio interfaces for AI interaction and accessibility
+                </div>
+                <div class="skill-card">
+                    <strong>Programming & Software Development</strong>
+                    Python, PyTorch, Hugging Face, full-stack deployment
+                </div>
+                <div class="skill-card">
+                    <strong>Data Engineering & Model Optimization</strong>
+                    Large datasets, efficiency improvements, real-time inference
+                </div>
+            </div>
         </section>
 
         <section id="contact">
@@ -316,43 +725,146 @@ I thrive on solving problems that test my limits, and I am driven by the idea of
             
             <div class="contact-info">
                 <div class="contact-item">
-                    <strong>Email:</strong> inigorri@live.com
+                    <div>
+                        <strong>Email</strong>
+                        <a href="mailto:inigorri@live.com">inigorri@live.com</a>
+                    </div>
                 </div>
                 <div class="contact-item">
-                    <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/iñigo-andoni-chandia-shichkov-419289157" target="_blank">Inigo Chandia</a>
+                    <div>
+                        <strong>LinkedIn</strong>
+                        <a href="https://www.linkedin.com/in/iñigo-andoni-chandia-shichkov-419289157" target="_blank">Inigo Chandia</a>
+                    </div>
                 </div>
                 <div class="contact-item">
-                    <strong>GitHub:</strong> <a href="https://github.com/IniNLP247" target="_blank">IniNLP247</a>
+                    <div>
+                        <strong>GitHub</strong>
+                        <a href="https://github.com/IniNLP247" target="_blank">IniNLP247</a>
+                    </div>
                 </div>
                 <div class="contact-item">
-                    <strong>HuggingFace:</strong> <a href="https://huggingface.co/IniNLP247" target="_blank">IniNLP247</a>
+                    <div>
+                        <strong>HuggingFace</strong>
+                        <a href="https://huggingface.co/IniNLP247" target="_blank">IniNLP247</a>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
     <footer>
-        <p>&copy; 2025 KenkoLabs. All rights reserved.</p>
-        <p>Built with passion and purpose.</p>
+        <div class="footer-content">
+            <p>&copy; 2025 KenkoLabs. All rights reserved.</p>
+            <p>Built with passion and purpose.</p>
+            <div class="social-links">
+                <a href="https://github.com/IniNLP247" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/iñigo-andoni-chandia-shichkov-419289157" target="_blank">LinkedIn</a>
+                <a href="https://huggingface.co/IniNLP247" target="_blank">HuggingFace</a>
+            </div>
+        </div>
     </footer>
 
+    <div class="scroll-top" id="scrollTop">↑</div>
+
     <script>
+        // Navigation functionality
         function showSection(sectionId) {
             const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
             sections.forEach(section => {
                 section.classList.remove('active');
             });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
             document.getElementById(sectionId).classList.add('active');
             
+            const activeLink = document.querySelector(`a[href="#${sectionId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Close mobile menu if open
+            const navLinksEl = document.getElementById('navLinks');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            navLinksEl.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
         }
 
-        document.querySelectorAll('nav a').forEach(link => {
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const sectionId = link.getAttribute('href').substring(1);
                 showSection(sectionId);
             });
+        });
+
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+
+            // Shrink header on scroll
+            const header = document.getElementById('header');
+            if (window.pageYOffset > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scroll for all internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+            });
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and timeline items
+        document.querySelectorAll('.project-card, .stat-card, .timeline-item, .skill-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s, transform 0.6s';
+            observer.observe(el);
         });
     </script>
 </body>
